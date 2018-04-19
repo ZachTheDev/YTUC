@@ -8,8 +8,8 @@
     <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
             onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
-    <script src="YTOAuth.js">
-    </script>
+    <script src="YTOAuth.js"></script>
+    <script src="background.js"></script>
 
 </head>
 <body>
@@ -19,6 +19,8 @@
 
 <div id="auth-status" style="display: inline; padding-left: 25px"></div>
 <hr>
+
+<button id="get-channels" onclick="main()">Get List of Channels</button>
 
 </body>
 </html>
