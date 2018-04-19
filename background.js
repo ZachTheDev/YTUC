@@ -1,12 +1,16 @@
+// var pubSub = require('./pubsub.js');
+// var pubSubRun = pubSub.
+import {pubSub} from './pubsub.js';
+
+var jsonFinder = {};
+var channelList = [];
+
 function main() {
     var request = gapi.client.youtube.subscriptions.list({'mine': 'true', 'part': 'snippet',
         'fields': 'items/snippet/resourceId/channelId,nextPageToken,pageInfo,prevPageToken,tokenPagination',
         'maxResults': '50'});
 
-    var jsonFinder = {};
-    var channelList = [];
-
-// Execute the API request.
+    // Execute the API request.
     request.execute(function (response) {
         console.log(response);
 
@@ -17,5 +21,4 @@ function main() {
         });
     })
 }
-
 
