@@ -8,7 +8,7 @@ module.exports = {
         // If modifying these scopes, delete your previously saved credentials
         // at ~/.credentials/google-apis-nodejs-quickstart.json
         var SCOPES = ['https://www.googleapis.com/auth/youtube.force-ssl']
-        var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
+        var TOKEN_DIR = ('C:/Users/zach' || process.env.HOMEPATH ||
             process.env.USERPROFILE) + '/.credentials/';
         var TOKEN_PATH = TOKEN_DIR + 'google-apis-nodejs-quickstart.json';
 
