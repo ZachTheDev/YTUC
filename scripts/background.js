@@ -17,17 +17,13 @@ function main() {
     });
 }
 
-
 function pubSub() {
     requirejs(["ext/request"], function(request) {
-
-        
-
         channelList.forEach(function (value) {
             request.post('https://pubsubhubbub.appspot.com/subscribe', {
                 form: {
                     'hub.mode': ('subscribe'),
-                    'hub.callback': 'http://postb.in/6Obbk3wZ',
+                    'hub.callback': 'https://webhook.site/96f9eeef-41d5-4b81-beed-ba921e84048f',
                     'hub.topic': 'https://www.youtube.com/xml/feeds/videos.xml?channel_id=' + channelList[value].id,
                     'hub.lease_seconds': '31536000'
                 }
@@ -35,7 +31,7 @@ function pubSub() {
                 if (!error && pubSubResponse.statusCode == 202) {
                     res.status(200).json({
                         code: 'channel_subscribed',
-                        details: "Subscribed/unsubscribed succesfully to https://www.youtube.com/channel/" + channels[0].id
+                        details: "Subscribed/unsubscribed succesfully to https://www.youtube.com/channel/" + channelList[value].id
                     })
                 } else {
                     res.status(500).json({
@@ -46,7 +42,6 @@ function pubSub() {
                 }
             })
         });
-
     });
 }
 
