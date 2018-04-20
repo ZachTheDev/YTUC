@@ -19,25 +19,28 @@ function main() {
 
 
 function pubSub() {
-    import PubSub from 'pubsub-js';
-    // create a function to subscribe to topics
-    var mySubscriber = function (msg, data) {
-        console.log( msg, data );
-    };
+    requirejs(["ext/pubsub.js"], function(PubSub) {
 
-    // add the function to the list of subscribers for a particular topic
-    // we're keeping the returned token, in order to be able to unsubscribe
-    // from the topic later on
-    var token = PubSub.subscribe('MY TOPIC', mySubscriber);
+        // create a function to subscribe to topics
+        var mySubscriber = function (msg, data) {
+            console.log( msg, data );
+        };
 
-    // publish a topic asyncronously
-    PubSub.publish('MY TOPIC', 'hello world!');
+        // add the function to the list of subscribers for a particular topic
+        // we're keeping the returned token, in order to be able to unsubscribe
+        // from the topic later on
+        var token = PubSub.subscribe('MY TOPIC', mySubscriber);
 
-    // publish a topic syncronously, which is faster in some environments,
-    // but will get confusing when one topic triggers new topics in the
-    // same execution chain
-    // USE WITH CAUTION, HERE BE DRAGONS!!!
-    PubSub.publishSync('MY TOPIC', 'hello world!');
+        // publish a topic asyncronously
+        PubSub.publish('MY TOPIC', 'hello world!');
+
+        // publish a topic syncronously, which is faster in some environments,
+        // but will get confusing when one topic triggers new topics in the
+        // same execution chain
+        // USE WITH CAUTION, HERE BE DRAGONS!!!
+        PubSub.publishSync('MY TOPIC', 'hello world!');
+
+    });
 }
 
 // function pubSub() {
