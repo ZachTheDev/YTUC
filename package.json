@@ -2,6 +2,7 @@
   "name": "YTUC",
   "version": "0.1.0",
   "dependencies": {
-    "pubsub-js": "^1.6.0"
+    "pubsub-js": "^1.6.0",
+    "request": "^2.85.0"
   }
 }
