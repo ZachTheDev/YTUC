@@ -4,11 +4,10 @@
     <title>YouTube Upload Catcher</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="scripts/app.js"></script>
     <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"></script>
 
-    <script src="scripts/YTOAuth.js"></script>
-    <script src="scripts/background.js"></script>
+    <script src="js/background.js"></script>
+    <script src="js/YTOAuth.js"></script>
 
 </head>
 <body>
@@ -19,7 +18,9 @@
 <div id="auth-status" style="display: inline; padding-left: 25px"></div>
 <hr>
 
-<button id="get-channels">Get List of Channels</button>
+<button id="test" onclick="getUploadPlaylistId()">getUploadPlaylistId()</button>
+<button id="test" onclick="getVideoId()">getVideoId()</button>
+<button id="test" onclick="getMetadataFromId()">getMetadataFromId()</button>
 
 </body>
 </html>
