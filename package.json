@@ -1,9 +1,0 @@
-{
-  "name": "YTUC",
-  "version": "0.1.0",
-  "dependencies": {
-    "browserify": "^16.2.0",
-    "pubsubhubbub": "^0.4.1",
-    "watchify": "^3.11.0"
-  }
-}
