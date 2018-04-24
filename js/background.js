@@ -6,7 +6,7 @@ function getChannels() {
         'mine': 'true',
         'part': 'snippet',
         'fields': 'items/snippet/resourceId/channelId,nextPageToken,pageInfo,prevPageToken,tokenPagination',
-        'maxResults': '1'});
+        'maxResults': '10'});
 
     // Execute the API request.
     request.execute(function (response) {
@@ -18,6 +18,8 @@ function getChannels() {
     });
 }
 
+var videoIdByChannel = [];
+
 function getVideoId() {
     for (var i = 0; i < channelList.length; i++) {
 
@@ -25,7 +27,7 @@ function getVideoId() {
             'part': 'snippet',
             'fields': 'items/id/videoId',
             'maxResults': '50',
-            'channelId': 'UCWizIdwZdmr43zfxlCktmNw',//channelList[i]
+            'channelId': channelList[i],
             'publishedAfter': '2018-04-20T00:00:00Z'
         });
 
@@ -35,17 +37,24 @@ function getVideoId() {
                 // console.log(JSON.stringify(item, null, "\t"));
                 videoIdList.push(item.id.videoId);
             });
-            console.log(videoIdList);
+
+            // console.log(videoIdList);
         });
     }
+
+    for (var i = 0; i < channelList.length; ++i) {
+        videoIdByChannel[i] = videoIdList;
+    }
+    console.log(videoIdByChannel);
 }
 
 var channelTitle = "";
-
 var thumbnailUrl = "";
 var videoTitle = "";
 var duration = "";
 var viewCount = "";
+
+var videoList = [];
 
 
 function getMetadataFromId() {
@@ -67,6 +76,11 @@ function getMetadataFromId() {
                 duration = item.contentDetails.duration;
                 viewCount = item.statistics.viewCount;
             });
+
+            for (var i = 0; i < videoIdList.length; ++i) {
+                markers[i] = "some stuff";
+            }
+
             // console.log(channelTitle);
             // console.log(thumbnailUrl);
             // console.log(videoTitle);
