@@ -2,7 +2,8 @@
   "name": "YTUC",
   "version": "0.1.0",
   "dependencies": {
-    "pubsub-js": "^1.6.0",
-    "request": "^2.85.0"
+    "browserify": "^16.2.0",
+    "pubsubhubbub": "^0.4.1",
+    "watchify": "^3.11.0"
   }
 }
