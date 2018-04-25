@@ -6,7 +6,7 @@ function getChannels() {
         'mine': 'true',
         'part': 'snippet',
         'fields': 'items/snippet/resourceId/channelId,nextPageToken,pageInfo,prevPageToken,tokenPagination',
-        'maxResults': '10'});
+        'maxResults': '50'});
 
     // Execute the API request.
     request.execute(function (response) {
@@ -19,33 +19,49 @@ function getChannels() {
 }
 
 var videoIdByChannel = [];
+var finalFormat = [];
 
 function getVideoId() {
     for (var i = 0; i < channelList.length; i++) {
+
+        const curChannel = channelList[i];
 
         var request = gapi.client.youtube.search.list({
             'part': 'snippet',
             'fields': 'items/id/videoId',
             'maxResults': '50',
-            'channelId': channelList[i],
+            'channelId': curChannel,
             'publishedAfter': '2018-04-20T00:00:00Z'
         });
 
         // Execute the API request.
         request.execute(function (response) {
+            videoIdList = [];
             response.items.forEach(function (item) {
                 // console.log(JSON.stringify(item, null, "\t"));
                 videoIdList.push(item.id.videoId);
             });
 
             // console.log(videoIdList);
+
+            if (!videoIdList.length) {
+                videoIdList.push("No recent videos");
+            }
+
+            videoIdByChannel.push(videoIdList);
+
+            var channelAndVideos = [
+                [curChannel],
+                [videoIdList]
+            ];
+            // console.log(channelAndVideos);
+
+            finalFormat.push(channelAndVideos);
+
         });
     }
-
-    for (var i = 0; i < channelList.length; ++i) {
-        videoIdByChannel[i] = videoIdList;
-    }
-    console.log(videoIdByChannel);
+    // console.log(videoIdByChannel);
+    console.log(finalFormat);
 }
 
 var channelTitle = "";
@@ -58,12 +74,12 @@ var videoList = [];
 
 
 function getMetadataFromId() {
-    for (var i = 0; i < videoIdList.length; i++) {
+    for (var i = 0; i < finalFormat.length; i++) {
 
         var request = gapi.client.youtube.videos.list({
             'part': 'snippet,contentDetails,statistics',
             'fields': 'items(contentDetails/duration,snippet(channelTitle,thumbnails/maxres/url,title),statistics/viewCount)',
-            'id': videoIdList[i]
+            'id': finalFormat[0][i]
         });
 
         // Execute the API request.
