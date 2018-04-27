@@ -5,6 +5,7 @@ let videoIdByChannel = [];
 let finalFormat = [];
 
 let channelTitle;
+let uploadDate;
 let thumbnailUrl;
 let videoTitle;
 let duration;
@@ -96,7 +97,8 @@ function getVideoId() {
 }
 
 function getMetadataFromId() {
-    channelTitle = '';thumbnailUrl = '';videoTitle = '';duration = '';viewCount = '';finalData = [];
+    let sortedArray = [];
+    channelTitle = '';uploadDate = '';thumbnailUrl = '';videoTitle = '';duration = '';viewCount = '';finalData = [];
     for (let x = 0; x < videoCount; x++) {
         for (let i = 0; i < finalFormat.length; i++) {
 
@@ -109,7 +111,7 @@ function getMetadataFromId() {
             if (typeof(videoId) != 'undefined') {
                 let request = gapi.client.youtube.videos.list({
                     'part': 'snippet,contentDetails,statistics',
-                    'fields': 'items(contentDetails/duration,snippet(channelTitle,title),statistics/viewCount)', //,thumbnails/maxres/url
+                    'fields': 'items(contentDetails/duration,snippet(channelTitle,title,publishedAt),statistics/viewCount)', //,thumbnails/maxres/url
                     'id': videoId
                 });
                 // Execute the API request.
@@ -118,12 +120,20 @@ function getMetadataFromId() {
                         response.items.forEach(function (item) {
                             // console.log(JSON.stringify(item, null, "\t"));
                             channelTitle = item.snippet.channelTitle;
+                            uploadDate = item.snippet.publishedAt;
                             thumbnailUrl = "https://i.ytimg.com/vi/" + videoId + "/maxresdefault.jpg";//item.snippet.thumbnails.maxres.url;
                             videoTitle = item.snippet.title;
                             duration = item.contentDetails.duration;
                             viewCount = item.statistics.viewCount;
                         });
-                        finalData.push([channelId, [channelTitle, thumbnailUrl, videoTitle, duration, viewCount]]);
+                        finalData.push([channelId, [channelTitle, uploadDate, thumbnailUrl, videoTitle, duration, viewCount]]);
+
+                         sortedArray = finalData.sort(function (a, b) {
+                            if (a < b) return -1;
+                            else if (a > b) return 1;
+                            return 0;
+                        });
+
                 });
             }
         }
