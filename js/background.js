@@ -15,11 +15,12 @@ let finalData = [];
 let videoCount = 0;
 
 function getChannels() {
+    channelList = [];
     let request = gapi.client.youtube.subscriptions.list({
         'mine': 'true',
         'part': 'snippet',
         'fields': 'items/snippet/resourceId/channelId,nextPageToken,pageInfo,prevPageToken,tokenPagination',
-        'maxResults': '3'
+        'maxResults': '50'
     });
 
     // Execute the API request.
@@ -33,6 +34,7 @@ function getChannels() {
 }
 
 function getVideoId() {
+    videoIdList = [];videoIdByChannel = [];finalFormat = [];
     for (let i = 0; i < channelList.length; i++) {
 
         const curChannel = channelList[i];
@@ -73,38 +75,37 @@ function getVideoId() {
 }
 
 function getMetadataFromId() {
+    channelTitle = '';thumbnailUrl = '';videoTitle = '';duration = '';viewCount = '';finalData = [];
     for (let x = 0; x < videoCount; x++) {
         for (let i = 0; i < finalFormat.length; i++) {
 
+            let videoId = finalFormat[i][1][0][x];
             let channelId = finalFormat[i][0];
-            // console.log(finalFormat[i][0][0]);
-
-            //TODO  note to self, put x on the outside of i to try and see if the problem is with i
 
             // console.log(finalFormat[i][1][0]);
-            console.log(finalFormat[i][1][0][x]);
+            // console.log(finalFormat[i][1][0][x]);
 
-            let request = gapi.client.youtube.videos.list({
-                'part': 'snippet,contentDetails,statistics',
-                'fields': 'items(contentDetails/duration,snippet(channelTitle,thumbnails/maxres/url,title),statistics/viewCount)',
-                'id': finalFormat[i][1][0][x]
-            });
+            if (typeof(videoId) != 'undefined') {
+                let request = gapi.client.youtube.videos.list({
+                    'part': 'snippet,contentDetails,statistics',
+                    'fields': 'items(contentDetails/duration,snippet(channelTitle,thumbnails/maxres/url,title),statistics/viewCount)',
+                    'id': finalFormat[i][1][0][x]
+                });
 
-            // Execute the API request.
-            request.execute(function (response) {
-                if (typeof(response) != 'undefined') {
-                    console.log(response);
-                    // response.items.forEach(function (item) {
-                    //     // console.log(JSON.stringify(item, null, "\t"));
-                    //     channelTitle = item.snippet.channelTitle;
-                    //     thumbnailUrl = item.snippet.thumbnails.maxres.url;
-                    //     videoTitle = item.snippet.title;
-                    //     duration = item.contentDetails.duration;
-                    //     viewCount = item.statistics.viewCount;
-                    // });
-                    // finalData.push([channelId, [channelTitle, thumbnailUrl, videoTitle, duration, viewCount]]);
-                }
-            });
+                // Execute the API request.
+                request.execute(function (response) {
+                        // console.log(response);
+                        response.items.forEach(function (item) {
+                            console.log(JSON.stringify(item, null, "\t"));
+                        //     channelTitle = item.snippet.channelTitle;
+                        //     thumbnailUrl = item.snippet.thumbnails.maxres.url;
+                        //     videoTitle = item.snippet.title;
+                        //     duration = item.contentDetails.duration;
+                        //     viewCount = item.statistics.viewCount;
+                        });
+                        // finalData.push([channelId, [channelTitle, thumbnailUrl, videoTitle, duration, viewCount]]);
+                });
+            }
         }
     }
     console.log(finalData);

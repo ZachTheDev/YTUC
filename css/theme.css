@@ -1,0 +1,25 @@
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* Padding below the footer and lighter body text */
+body{background-color: #f7f7f7;}
+hr { border-top:1px solid #e4e4e4;}
+.jumbotron { background-color:#4285f4; color:#fff; margin-bottom: 50px; padding-top:86px;}
+.jumbotron p {font-weight: 300;}
+.pmd-card {min-height: 315px;}
+
+/* CUSTOMIZE THE NAVBAR
+-------------------------------------------------- */
+.navbar-inverse { background: #4285f4; border-color:rgba(0,0,0,0.10);}
+.pmd-navbar .navbar-nav>li>a.active { color: #FFF;}
+.pmd-navbar .navbar-brand, .navbar-inverse .navbar-nav>li>a { color: rgba(255,255,255,0.87);}
+.pmd-navbar .pmd-navbar-right-icon .btn-default { color:#fff;}
+.pmd-navbar .pmd-navbar-right-icon .btn-default:focus,
+.pmd-navbar .pmd-navbar-right-icon .btn-default:focus:hover,
+.pmd-navbar .pmd-navbar-right-icon .btn-default:active:hover,
+.pmd-navbar .pmd-navbar-right-icon .btn-default:hover { background:rgba(255,255,255,0.1);}
+.pmd-navbar .pmd-navbar-right-icon .btn-default .ink { background:#fff;}
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover {background-color:#4285f4;}
+@media screen and (max-width: 767px) { 
+	.pmd-navbar.navbar-inverse .pmd-navbar-sidebar { background-color: #4285f4;}
+	.navbar-inverse .navbar-nav .open .dropdown-menu>li>a { color: #ffffff;}
+}

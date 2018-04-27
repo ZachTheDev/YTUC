@@ -1,0 +1,29 @@
+/* ----------------------------
+	Propeller top bar
+---------------------------- */
+.propeller-topbar-body .navbar{ position: relative; margin-bottom: 0;}
+.propeller-topbar-body .jumbotron{ padding-top: 30px;}
+.propeller-topbar .navbar-brand{ padding: 0; margin-bottom:0; margin-left: 0; float:left;}
+.propeller-topbar .navbar-header {float:left; position:relative;}
+.by-digicorp { font-size: 11px; font-weight: 300; line-height: 1; margin-bottom: 0; margin-right: 2px; margin-top: -12px; text-align: right; position: absolute;  color:#001d80; top: 48px; left: 96px;}
+.by-digicorp a, .by-digicorp a strong{ color: #001d80;}
+.propeller-topbar a svg{ height: 40px;}
+.propeller-topbar .pmd-navbar-right-icon { padding-top: 8px;}
+.propeller-topbar{ background-color: #FFF; height: 56px; width: 100%;}
+.propeller-topbar .btn-primary {
+    background-color: #4acc8e;
+    color: #fff;
+    font-size: 14px;
+}
+.propeller-topbar i{color:#001d80;}
+.back-btn {float: left; margin-right: 0; margin-top: 7px;}
+@media screen and (max-width:420px)
+{
+	.propeller-topbar a svg {width: 80%; height: 40px;}
+	.by-digicorp {left: 62px;}
+}
+@media screen and (max-width:320px)
+{
+	.propeller-topbar .pmd-navbar-right-icon {margin-top: -40px; padding:0;}
+	.by-digicorp {left: 75px;}
+}
