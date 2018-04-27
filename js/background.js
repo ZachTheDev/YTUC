@@ -21,7 +21,7 @@ function getChannels() {
         'mine': 'true',
         'part': 'snippet',
         'fields': 'items/snippet/resourceId/channelId,nextPageToken,pageInfo,prevPageToken,tokenPagination',
-        'maxResults': '50'
+        'maxResults': '3'
     });
 
     let totalResults;
@@ -32,21 +32,21 @@ function getChannels() {
         totalResults = response.pageInfo.totalResults;
         pageToken = response.nextPageToken;
 
-        if (totalResults >= 50) {
-            let request = gapi.client.youtube.subscriptions.list({
-                'mine': 'true',
-                'part': 'snippet',
-                'fields': 'items/snippet/resourceId/channelId,nextPageToken,pageInfo,prevPageToken,tokenPagination',
-                'maxResults': '50',
-                'pageToken': pageToken
-            });
-            request.execute(function (response) {
-                response.items.forEach(function (item) {
-                    // console.log(JSON.stringify(item, null, "\t"));
-                    channelList.push(item.snippet.resourceId.channelId);
-                });
-            });
-        }
+        // if (totalResults >= 50) {
+        //     let request = gapi.client.youtube.subscriptions.list({
+        //         'mine': 'true',
+        //         'part': 'snippet',
+        //         'fields': 'items/snippet/resourceId/channelId,nextPageToken,pageInfo,prevPageToken,tokenPagination',
+        //         'maxResults': '50',
+        //         'pageToken': pageToken
+        //     });
+        //     request.execute(function (response) {
+        //         response.items.forEach(function (item) {
+        //             // console.log(JSON.stringify(item, null, "\t"));
+        //             channelList.push(item.snippet.resourceId.channelId);
+        //         });
+        //     });
+        // }
         response.items.forEach(function (item) {
             // console.log(JSON.stringify(item, null, "\t"));
             channelList.push(item.snippet.resourceId.channelId);
@@ -56,7 +56,7 @@ function getChannels() {
 }
 
 function getVideoId() {
-    videoIdList = [];videoIdByChannel = [];finalFormat = [];
+    videoIdList = [];videoIdByChannel = [];finalFormat = [];videoCount = 0;
     for (let i = 0; i < channelList.length; i++) {
 
         const curChannel = channelList[i];
@@ -97,7 +97,6 @@ function getVideoId() {
 }
 
 function getMetadataFromId() {
-    let sortedArray = [];
     channelTitle = '';uploadDate = '';thumbnailUrl = '';videoTitle = '';duration = '';viewCount = '';finalData = [];
     for (let x = 0; x < videoCount; x++) {
         for (let i = 0; i < finalFormat.length; i++) {
@@ -116,27 +115,51 @@ function getMetadataFromId() {
                 });
                 // Execute the API request.
                 request.execute(function (response) {
-                        // console.log(response);
-                        response.items.forEach(function (item) {
-                            // console.log(JSON.stringify(item, null, "\t"));
-                            channelTitle = item.snippet.channelTitle;
-                            uploadDate = item.snippet.publishedAt;
-                            thumbnailUrl = "https://i.ytimg.com/vi/" + videoId + "/maxresdefault.jpg";//item.snippet.thumbnails.maxres.url;
-                            videoTitle = item.snippet.title;
-                            duration = item.contentDetails.duration;
-                            viewCount = item.statistics.viewCount;
-                        });
-                        finalData.push([channelId, [channelTitle, uploadDate, thumbnailUrl, videoTitle, duration, viewCount]]);
+                    // console.log(response);
+                    response.items.forEach(function (item) {
+                        // console.log(JSON.stringify(item, null, "\t"));
+                        channelTitle = item.snippet.channelTitle;
+                        uploadDate = item.snippet.publishedAt;
+                        thumbnailUrl = "https://i.ytimg.com/vi/" + videoId + "/maxresdefault.jpg";//item.snippet.thumbnails.maxres.url;
+                        videoTitle = item.snippet.title;
+                        duration = item.contentDetails.duration;
+                        viewCount = item.statistics.viewCount;
+                    });
+                    finalData.push([channelId, [channelTitle, uploadDate, thumbnailUrl, videoTitle, duration, viewCount]]);
 
-                         sortedArray = finalData.sort(function (a, b) {
-                            if (a < b) return -1;
-                            else if (a > b) return 1;
-                            return 0;
-                        });
-
+                     finalData.sort(function (a, b) {
+                        if (a < b) return -1;
+                        else if (a > b) return 1;
+                        return 0;
+                    });
                 });
             }
         }
     }
     console.log(finalData);
 }
+
+let groupedData = [];
+
+function groupChannelVideos() {
+
+    
+
+    // let nextItem;
+    // let curItem;
+    // // console.log(finalData[0][0]);
+    // for (let i = 0; i < videoCount-1; i++) {
+    //     let x = i + 1;
+    //     // console.log(finalData[x]);
+    //     nextItem = finalData[x];
+    //     curItem = finalData[i];
+    //     if (curItem[0] == nextItem[0]) {
+    //         groupedData.push([finalData[i]]);
+    //         // console.log(finalData[i]);
+    //     }else{
+    //         groupedData.push([finalData[i+1]]);
+    //     }
+    // }
+    // console.log(groupedData);
+}
+
