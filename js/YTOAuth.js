@@ -47,16 +47,17 @@ function handleAuthClick() {
 function revokeAccess() {
     GoogleAuth.disconnect();
 }
+
 function setSigninStatus(isSignedIn) {
     var user = GoogleAuth.currentUser.get();
-    var isAuthorized = user.hasGrantedScopes(SCOPE);
+    isAuthorized = user.hasGrantedScopes(SCOPE);
     if (isAuthorized) {
         $('#sign-in-or-out-button').html('Sign out');
         $('#revoke-access-button').css('display', 'inline-block');
         $('#auth-status').html('You are currently signed in and have granted ' +
             'access to this app.');
 
-        getChannels();
+        runAll(); //This line of code is not from Google, it is for hooking my project into Google's OAuth Code
 
     } else {
         $('#sign-in-or-out-button').html('Sign In/Authorize');

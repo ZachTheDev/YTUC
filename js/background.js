@@ -4,14 +4,16 @@ let videoIdList = [];
 let videoIdByChannel = [];
 let finalFormat = [];
 
-let channelTitle;
-let uploadDate;
-let thumbnailUrl;
-let videoTitle;
-let duration;
-let viewCount;
+let channelTitle = '';
+let uploadDate = '';
+let thumbnailUrl = '';
+let videoTitle = '';
+let duration = '';
+let viewCount = '';
 
 let finalData = [];
+
+let globalData = [];
 
 let videoCount = 0;
 
@@ -93,7 +95,7 @@ function getVideoId() {
             }
         });
     }
-    console.log(finalFormat);
+    // console.log(finalFormat);
 }
 
 function getMetadataFromId() {
@@ -136,7 +138,8 @@ function getMetadataFromId() {
             }
         }
     }
-    console.log(finalData);
+    // console.log(finalData);
+    globalData = finalData;
 }
 
 let groupedData = [];
@@ -145,30 +148,46 @@ let tempHold = [];
 function groupChannelVideos() {
     groupedData = [];
 
-    let prevChannel = finalData[0][0];
+    // console.log(typeof finalData[0][0] === 'undefined');
+    // console.log(finalData[0][0]);
+
+    console.log((globalData[0][0] === undefined));
+    console.log(globalData[0][0]);
+
+    // console.log(globalData[0][0]);
+
+    // let prevChannel = finalData[0][0];
     let curChannel = '';
 
-    for(let i = 0; i < videoCount; i++) {
-        let channelId = finalData[i][0];
-
-        curChannel = channelId;
-
-        // console.log("prevChannel = " + prevChannel);
-        // console.log("curChannel = " + curChannel);
-
-        if(prevChannel === curChannel) {
-            // console.log(prevVideo + " != " + curVideo);
-            tempHold.push(finalData[i]);
-
-            if (i === (videoCount - 1)) {
-                groupedData.push([tempHold]);
-            }
-        }else{
-            groupedData.push([tempHold]);
-            tempHold = [];
-        }
-        prevChannel = channelId;
-    }
+    // for(let i = 0; i < videoCount; i++) {
+    //     let channelId = finalData[i][0];
+    //
+    //     curChannel = channelId;
+    //
+    //     // console.log("prevChannel = " + prevChannel);
+    //     // console.log("curChannel = " + curChannel);
+    //
+    //     if(prevChannel === curChannel) {
+    //         // console.log(prevVideo + " != " + curVideo);
+    //         tempHold.push(finalData[i]);
+    //
+    //         if (i === (videoCount - 1)) {
+    //             groupedData.push([tempHold]);
+    //         }
+    //     }else{
+    //         groupedData.push([tempHold]);
+    //         tempHold = [];
+    //     }
+    //     prevChannel = channelId;
+    // }
     console.log(groupedData);
+}
+
+function runAll () {
+    getChannels();
+    getVideoId();
+    getMetadataFromId();
+    groupChannelVideos();
+    alert('done');
 }
 
