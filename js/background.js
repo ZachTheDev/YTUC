@@ -54,7 +54,7 @@ function getChannels() {
             channelList.push(item.snippet.resourceId.channelId);
         });
     });
-    // console.log(channelList);
+    console.log(channelList);
 }
 
 function getVideoId() {
@@ -95,7 +95,7 @@ function getVideoId() {
             }
         });
     }
-    // console.log(finalFormat);
+    console.log(finalFormat);
 }
 
 function getMetadataFromId() {
@@ -138,7 +138,7 @@ function getMetadataFromId() {
             }
         }
     }
-    // console.log(finalData);
+    console.log(finalData);
     globalData = finalData;
 }
 
@@ -151,43 +151,49 @@ function groupChannelVideos() {
     // console.log(typeof finalData[0][0] === 'undefined');
     // console.log(finalData[0][0]);
 
-    console.log((globalData[0][0] === undefined));
-    console.log(globalData[0][0]);
+    // console.log((globalData[0][0] === undefined));
+    // console.log(globalData[0][0]);
 
     // console.log(globalData[0][0]);
 
-    // let prevChannel = finalData[0][0];
+    let prevChannel = finalData[0][0];
     let curChannel = '';
 
-    // for(let i = 0; i < videoCount; i++) {
-    //     let channelId = finalData[i][0];
-    //
-    //     curChannel = channelId;
-    //
-    //     // console.log("prevChannel = " + prevChannel);
-    //     // console.log("curChannel = " + curChannel);
-    //
-    //     if(prevChannel === curChannel) {
-    //         // console.log(prevVideo + " != " + curVideo);
-    //         tempHold.push(finalData[i]);
-    //
-    //         if (i === (videoCount - 1)) {
-    //             groupedData.push([tempHold]);
-    //         }
-    //     }else{
-    //         groupedData.push([tempHold]);
-    //         tempHold = [];
-    //     }
-    //     prevChannel = channelId;
-    // }
+    let channelId = '';
+
+    for(let i = 0; i < videoCount; i++) {
+        channelId = finalData[i][0];
+
+        curChannel = channelId;
+
+        // console.log("prevChannel = " + prevChannel);
+        // console.log("curChannel = " + curChannel);
+
+        if(prevChannel === curChannel) {
+            // console.log(prevVideo + " != " + curVideo);
+            tempHold.push(finalData[i]);
+
+            if (i === (videoCount - 1)) {
+                groupedData.push([tempHold]);
+            }
+        }else{
+            groupedData.push([tempHold]);
+            tempHold = [];
+        }
+        prevChannel = channelId;
+    }
     console.log(groupedData);
 }
 
-function runAll () {
+function runAll() {
     getChannels();
-    getVideoId();
-    getMetadataFromId();
-    groupChannelVideos();
-    alert('done');
+    setTimeout(function(){
+        getVideoId();
+        setTimeout(function(){
+            getMetadataFromId();
+            setTimeout(function(){
+                groupChannelVideos();
+            },2500);
+        },2500);
+    },2500);
 }
-

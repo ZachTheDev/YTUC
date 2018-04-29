@@ -57,7 +57,8 @@ function setSigninStatus(isSignedIn) {
         $('#auth-status').html('You are currently signed in and have granted ' +
             'access to this app.');
 
-        runAll(); //This line of code is not from Google, it is for hooking my project into Google's OAuth Code
+         runAll(); //This line of code is not from Google, it is for hooking my project into Google's OAuth Code
+
 
     } else {
         $('#sign-in-or-out-button').html('Sign In/Authorize');
