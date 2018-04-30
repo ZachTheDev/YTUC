@@ -3,13 +3,13 @@
 /* Padding below the footer and lighter body text */
 body{background-color: #f7f7f7;}
 hr { border-top:1px solid #e4e4e4;}
-.jumbotron { background-color:#4285f4; color:#fff; margin-bottom: 50px; padding-top:86px;}
+.jumbotron { background-color:#ff0000; color:#fff; margin-bottom: 50px; padding-top:86px;}
 .jumbotron p {font-weight: 300;}
 .pmd-card {min-height: 315px;}
 
 /* CUSTOMIZE THE NAVBAR
 -------------------------------------------------- */
-.navbar-inverse { background: #4285f4; border-color:rgba(0,0,0,0.10);}
+.navbar-inverse { background: #ff0000; border-color:rgba(0,0,0,0.10);}
 .pmd-navbar .navbar-nav>li>a.active { color: #FFF;}
 .pmd-navbar .navbar-brand, .navbar-inverse .navbar-nav>li>a { color: rgba(255,255,255,0.87);}
 .pmd-navbar .pmd-navbar-right-icon .btn-default { color:#fff;}
@@ -18,8 +18,73 @@ hr { border-top:1px solid #e4e4e4;}
 .pmd-navbar .pmd-navbar-right-icon .btn-default:active:hover,
 .pmd-navbar .pmd-navbar-right-icon .btn-default:hover { background:rgba(255,255,255,0.1);}
 .pmd-navbar .pmd-navbar-right-icon .btn-default .ink { background:#fff;}
-.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover {background-color:#4285f4;}
-@media screen and (max-width: 767px) { 
-	.pmd-navbar.navbar-inverse .pmd-navbar-sidebar { background-color: #4285f4;}
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover {background-color:#ff0000;}
+@media screen and (max-width: 767px) {
+	.pmd-navbar.navbar-inverse .pmd-navbar-sidebar { background-color: #ff0000;}
 	.navbar-inverse .navbar-nav .open .dropdown-menu>li>a { color: #ffffff;}
+}
+
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+/*Borrowed and modified from https://stackoverflow.com/a/11439056/8073178*/
+/* tell the container's children to float left: */
+.float-my-children > * {
+    float:left;
+    margin-right:5px;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+/*End of borrowing*/
+
+/*Borrowed and heavily modified from https://stackoverflow.com/a/18339660/8073178*/
+.thumbnailContainer {
+    width: 100%;
+    height: 100%;
+    position:relative;
+}
+.thumbnailTag {
+    float: right;
+    position: absolute;
+    display: inline-block;
+    bottom: 0;
+    right: 0;
+    margin: 4px;
+    color: hsl(0, 0%, 100%);
+    background-color: hsl(0, 0%, 6.7%);
+    opacity: .8;
+    padding: 2px 4px;
+    border-radius: 2px;
+    letter-spacing: .5px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.2rem;
+    align-items: center;
+
+}
+/*End of borrowing*/
+
+.videoTitle {
+    margin: 16px 0 8px;
+}
+
+.metadata {
+    color: rgb(136, 136, 136);
+    font-size: 0.85rem;
+    display: flex;
+    /*flex-direction: column;*/
+}
+
+.views:after {
+    content: '•';
+    margin: 0 4px;
 }

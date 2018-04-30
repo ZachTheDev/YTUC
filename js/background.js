@@ -1,10 +1,15 @@
 let channelList = [];
+let iconList = [];
+
+let inputDate = '';
+
 let videoIdList = [];
 
 let videoIdByChannel = [];
 let finalFormat = [];
 
 let channelTitle = '';
+let channelIcon = '';
 let uploadDate = '';
 let thumbnailUrl = '';
 let videoTitle = '';
@@ -16,6 +21,22 @@ let finalData = [];
 let globalData = [];
 
 let videoCount = 0;
+
+function setupLogin() {
+    $('#jumboButton').attr('class', 'btn btn-default btn-lg pmd-ripple-effect jumboButton').attr('onClick', '$(\'#dtp\').focus();')
+        .html('Pick a Date');
+    $('#jumboTitle').html('Pick a Date');
+    $('#jumboSubtitle').html('Select a date to get a list of videos published after the date.');
+    $('#dtp').bootstrapMaterialDatePicker
+    ({
+        time: 'false'
+    }).on('change', function(e, date) {
+        getVideoId();
+        setTimeout(function(){
+            getMetadataFromId();
+        },1000);
+    })
+}
 
 function getChannels() {
     channelList = [];
@@ -53,12 +74,21 @@ function getChannels() {
             // console.log(JSON.stringify(item, null, "\t"));
             channelList.push(item.snippet.resourceId.channelId);
         });
+        if(!channelList.length) {
+            alert('No Channels Found, try another YouTube Account');
+        }
     });
     console.log(channelList);
 }
 
 function getVideoId() {
     videoIdList = [];videoIdByChannel = [];finalFormat = [];videoCount = 0;
+
+    let isVideosPresent = false;
+
+    let rawDate = $('#dtp').val();
+    inputDate = rawDate + 'T00:00:00Z';
+
     for (let i = 0; i < channelList.length; i++) {
 
         const curChannel = channelList[i];
@@ -66,7 +96,7 @@ function getVideoId() {
         let request = gapi.client.youtube.search.list({
             'part': 'snippet',
             'fields': 'items/id/videoId',
-            'publishedAfter': '2018-04-20T00:00:00Z',
+            'publishedAfter': inputDate, //'2018-04-20T00:00:00Z'
             'maxResults': '50',
             'channelId': curChannel
         });
@@ -83,6 +113,7 @@ function getVideoId() {
             // console.log(videoIdList);
 
             if (videoIdList.length) {
+                isVideosPresent = true;
                 videoIdByChannel.push(videoIdList);
                 let channelAndVideos = [
                     [curChannel],
@@ -90,11 +121,14 @@ function getVideoId() {
                 ];
                 finalFormat.push(channelAndVideos);
             }else{
-                //alert(curChannel + "has no new videos");
                 //TODO do something here to notify user of empty channel
             }
         });
     }
+    if (isVideosPresent === false) {
+        alert("Some channels have no new videos");
+    }
+
     console.log(finalFormat);
 }
 
@@ -106,15 +140,51 @@ function getMetadataFromId() {
             let videoId = finalFormat[i][1][0][x];
             let channelId = finalFormat[i][0][0];
 
-            // console.log(finalFormat[i][1][0]);
-            // console.log(finalFormat[i][1][0][x]);
-
-            if (typeof(videoId) != 'undefined') {
+            if (typeof(videoId) !== 'undefined') {
                 let request = gapi.client.youtube.videos.list({
                     'part': 'snippet,contentDetails,statistics',
-                    'fields': 'items(contentDetails/duration,snippet(channelTitle,title,publishedAt),statistics/viewCount)', //,thumbnails/maxres/url
+                    'fields': 'items(contentDetails/duration,snippet(channelTitle,title,publishedAt),statistics/viewCount)',
                     'id': videoId
                 });
+
+                let iconRequest = gapi.client.youtube.channels.list({
+                    'part': 'snippet',
+                    'fields': 'items(snippet(thumbnails/default/url,title)),nextPageToken,pageInfo,prevPageToken,tokenPagination',
+                    'id': channelId,
+                    'maxResults': '50'
+                });
+
+                let totalResultsIcons;
+                let pageToken;
+
+                // Execute the API request.
+                iconRequest.execute(function (response) {
+                    // console.log(JSON.stringify(response, null, "\t"));
+                    totalResultsIcons = response.pageInfo.totalResults;
+                    pageToken = response.nextPageToken;
+
+                    if (totalResultsIcons >= 50) {
+                        let request = gapi.client.youtube.channels.list({
+                            'part': 'snippet',
+                            'fields': 'items(snippet(thumbnails/default/url,title)),nextPageToken,pageInfo,prevPageToken,tokenPagination',
+                            'id': channelId,
+                            'maxResults': '50',
+                            'pageToken': pageToken
+                        });
+                        request.execute(function (response) {
+                            response.items.forEach(function (item) {
+                                // console.log(JSON.stringify(item, null, "\t"));
+                                let channelTitle = item.snippet.title;
+                                iconList.push([channelTitle, [item.snippet.thumbnails.default.url]]);
+                            });
+                        });
+                    }
+                    response.items.forEach(function (item) {
+                        // console.log(JSON.stringify(item, null, "\t"));
+                        channelIcon = item.snippet.thumbnails.default.url;
+                    });
+                });
+
                 // Execute the API request.
                 request.execute(function (response) {
                     // console.log(response);
@@ -122,17 +192,21 @@ function getMetadataFromId() {
                         // console.log(JSON.stringify(item, null, "\t"));
                         channelTitle = item.snippet.channelTitle;
                         uploadDate = item.snippet.publishedAt;
-                        thumbnailUrl = "https://i.ytimg.com/vi/" + videoId + "/maxresdefault.jpg";//item.snippet.thumbnails.maxres.url;
+                        thumbnailUrl = "https://i.ytimg.com/vi/" + videoId + "/maxresdefault.jpg";
                         videoTitle = item.snippet.title;
                         duration = item.contentDetails.duration;
                         viewCount = item.statistics.viewCount;
                     });
-                    finalData.push([channelId, [channelTitle, uploadDate, thumbnailUrl, videoTitle, duration, viewCount]]);
+
+                     finalData.push([channelTitle, [channelId, channelIcon, channelTitle, uploadDate, thumbnailUrl, videoTitle, duration, viewCount]]);
 
                      finalData.sort(function (a, b) {
-                        if (a < b) return -1;
-                        else if (a > b) return 1;
-                        return 0;
+                         if ((a.toString().toLowerCase()) < (b.toString().toLowerCase())) return -1;
+                         else if ((a.toString().toLowerCase()) > (b.toString().toLowerCase())) return 1;
+                         return 0;
+                        // if (a < b) return -1;
+                        // else if (a > b) return 1;
+                        // return 0;
                     });
                 });
             }
@@ -142,58 +216,35 @@ function getMetadataFromId() {
     globalData = finalData;
 }
 
-let groupedData = [];
-let tempHold = [];
 
-function groupChannelVideos() {
-    groupedData = [];
 
-    // console.log(typeof finalData[0][0] === 'undefined');
-    // console.log(finalData[0][0]);
 
-    // console.log((globalData[0][0] === undefined));
-    // console.log(globalData[0][0]);
-
-    // console.log(globalData[0][0]);
-
-    let prevChannel = finalData[0][0];
-    let curChannel = '';
-
-    let channelId = '';
-
-    for(let i = 0; i < videoCount; i++) {
-        channelId = finalData[i][0];
-
-        curChannel = channelId;
-
-        // console.log("prevChannel = " + prevChannel);
-        // console.log("curChannel = " + curChannel);
-
-        if(prevChannel === curChannel) {
-            // console.log(prevVideo + " != " + curVideo);
-            tempHold.push(finalData[i]);
-
-            if (i === (videoCount - 1)) {
-                groupedData.push([tempHold]);
-            }
-        }else{
-            groupedData.push([tempHold]);
-            tempHold = [];
-        }
-        prevChannel = channelId;
-    }
-    console.log(groupedData);
-}
-
-function runAll() {
-    getChannels();
-    setTimeout(function(){
-        getVideoId();
-        setTimeout(function(){
-            getMetadataFromId();
-            setTimeout(function(){
-                groupChannelVideos();
-            },2500);
-        },2500);
-    },2500);
-}
+// <div class="col-sm-4 col-xs-12">
+//     <!-- Default card starts -->
+// <div class="pmd-card pmd-card-default pmd-z-depth">
+//     <!-- Card body -->
+// <div class="pmd-card-title">
+//     <div class="titleContainer clearfix float-my-children">
+//     <img src="https://yt3.ggpht.com/-3GSWfHL9moQ/AAAAAAAAAAI/AAAAAAAAAAA/0tcO6ddi8eY/s88-c-k-no-mo-rj-c0xffffff/photo.jpg"
+// style="max-width:10%;display: inline;"/>
+//     <p class="pmd-card-title-text" style="font-size: 1.3rem;font-weight: 500; margin-left: 0.5rem;">Channel Title</p>
+// </div>
+// </div>
+//
+// <hr style="max-width: 90%;">
+//
+//     <div class="pmd-card-body">
+//     <div class="thumbnailContainer">
+//     <img src="img/yt_catcher.png" style="max-width:100%;"/>
+//     <span class="thumbnailTag">Test</span>
+//     </div>
+//     <div class="detailsContainer">
+//     <h3 class="videoTitle">Test video title</h3>
+// <div class="metadata">
+//     <span class="views">100k views</span><span class="uploadTime">1 hour ago</span>
+// </div>
+// </div>
+// </div>
+// <!--Default card ends -->
+// </div>
+// </div>

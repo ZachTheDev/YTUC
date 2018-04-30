@@ -2,25 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="img/yt_catcher.png" />
+    <link rel="shortcut icon" href="img/yt_catcher.png"/>
 
     <title>YouTube Upload Catcher</title>
 
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/vendor/bootstrap.min.css"/>
 
     <!--Google Icon Font-->
-    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 
     <!-- Propeller css -->
-    <link href="css/vendor/propeller.min.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
+    <link href="css/vendor/propeller.css" rel="stylesheet"/>
 
-    <link href="css/theme.css" rel="stylesheet">
+    <!-- Custom styles to override propeller styles-->
+    <link href="css/theme.css" rel="stylesheet"/>
 
     <!-- Propeller Topbar CSS -->
     <link href="css/vendor/propeller-topbar.css" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href="css/vendor/bootstrap-material-datetimepicker.css"/>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()">
@@ -30,63 +31,23 @@
     <script src="js/app.js"></script>
     <script src="js/YTOAuth.js"></script>
 
-
 </head>
 
 <body class="propeller-topbar-body vsc-initialized">
-
-<button id="sign-in-or-out-button" style="margin-left: 25px">Sign In/Authorize</button>
-<button id="revoke-access-button" style="display: none; margin-left: 25px">Revoke access</button>
-
-<div id="auth-status" style="display: inline; padding-left: 25px"></div>
-<hr>
-
-<button id="test" onclick="getChannels()">getChannels()</button>
-<button id="test" onclick="getVideoId()">getVideoId()</button>
-<button id="test" onclick="getMetadataFromId()">getMetadataFromId()</button>
-<button id="test" onclick="groupChannelVideos()">groupChannelVideos()</button>
-<button id="button">test me</button>
-<p id="p"></p>
 
 <!----------------------------
     Propeller Topbar
  ----------------------------->
 
-<!-- Nav menu with search -->
-<nav class="navbar pmd-navbar navbar-fixed-top navbar-inverse">
+<nav class="navbar pmd-navbar navbar-fixed-top navbar-inverse" style="height: 60px;">
     <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-            <button class="pmd-ripple-effect navbar-toggle pmd-navbar-toggle" type="button">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a href="javascript:void(0);" class="navbar-brand" data-ytta-id="-">Brand</a>
         </div>
-        <div class="pmd-navbar-right-icon pull-right">
-            <a class="btn btn-sm pmd-btn-fab pmd-btn-flat pmd-ripple-effect btn-default" href="javascript:void(0);" data-ytta-id="-"><i class="material-icons pmd-sm">search</i></a>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
         <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse pmd-navbar-sidebar">
             <ul class="nav navbar-nav navbar-right">
-                <li><a class="pmd-ripple-effect" href="javascript:void(0);" data-ytta-id="-">Home</a></li>
-                <li><a class="pmd-ripple-effect" href="javascript:void(0);" data-ytta-id="-">Features</a></li>
-                <li><a class="pmd-ripple-effect" href="javascript:void(0);" data-ytta-id="-">How it works</a></li>
-                <li><a class="pmd-ripple-effect" href="javascript:void(0);" data-ytta-id="-">Support</a></li>
-                <li class="dropdown pmd-dropdown">
-                    <a aria-expanded="false" role="button" data-toggle="dropdown" data-sidebar="true" class="pmd-ripple-effect dropdown-toggle" href="javascript:void(0);" data-ytta-id="-">Services <span class="caret"></span></a>
-                    <div class="pmd-dropdown-menu-container"><div class="pmd-dropdown-menu-bg"></div><ul role="menu" class="dropdown-menu dropdown-menu-right pm-ini" style="clip: rect(0px, 161px, 0px, 161px);">
-                        <li><a class="pmd-ripple-effect" href="javascript:void(0);" data-ytta-id="-">Action</a></li>
-                        <li><a class="pmd-ripple-effect" href="javascript:void(0);" data-ytta-id="-">Another action</a></li>
-                        <li><a class="pmd-ripple-effect" href="javascript:void(0);" data-ytta-id="-">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a class="pmd-ripple-effect" href="javascript:void(0);" data-ytta-id="-">Separated link</a></li>
-                    </ul></div>
-                </li>
+                <li><a class="pmd-ripple-effect signOut" style="cursor: pointer;" id="navSignOut" data-ytta-id="-"></a></li>
             </ul>
-        </div><!-- /.navbar-collapse -->
+        </div>
     </div>
     <div class="pmd-sidebar-overlay"></div>
 </nav>
@@ -94,90 +55,46 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 
 <div class="jumbotron text-center">
-    <div class="container">
-        <h1>Hello, world!</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-default btn-lg pmd-ripple-effect" href="javascript:void(0);" role="button" data-ytta-id="-">Learn more »</a></p>
+    <div class="container" id="frontContainer">
+        <h1 id="jumboTitle">Authorize YouTube Account</h1>
+        <p id="jumboSubtitle">Please click the button below to give access to your YouTube subscriptions, so we can get a list of videos</p>
+        <p><a class="btn btn-default btn-lg pmd-ripple-effect jumboButton signIn" id="jumboButton" role="button" data-ytta-id="-">Sign In</a></p>
     </div>
 </div>
 
 <div class="container">
-    <!-- Example row of columns -->
     <div class="row">
         <div class="col-sm-4 col-xs-12">
             <!-- Default card starts -->
             <div class="pmd-card pmd-card-default pmd-z-depth">
-
                 <!-- Card body -->
                 <div class="pmd-card-title">
-                    <h2 class="pmd-card-title-text">Detailed User Manual</h2>
-                    <span class="pmd-card-subtitle-text">Contains Detailed Guide</span>
+                    <div class="titleContainer clearfix float-my-children">
+                        <img src="https://yt3.ggpht.com/-3GSWfHL9moQ/AAAAAAAAAAI/AAAAAAAAAAA/0tcO6ddi8eY/s88-c-k-no-mo-rj-c0xffffff/photo.jpg"
+                             style="max-width:10%;display: inline;"/>
+                        <p class="pmd-card-title-text" style="font-size: 1.3rem;font-weight: 500; margin-left: 0.5rem;">Channel Title</p>
+                    </div>
                 </div>
+
+                <hr style="max-width: 90%;">
 
                 <div class="pmd-card-body">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et erat ut nulla imperdiet convallis. Aenean ornare imperdiet quam vitae posuere. In molestie convallis ante a ornare. Donec lacus orci, rutrum eu volutpat ut, euismod in turpis.
+                    <div class="thumbnailContainer">
+                        <img src="img/yt_catcher.png" style="max-width:100%;"/>
+                        <span class="thumbnailTag">Test</span>
+                    </div>
+                    <div class="detailsContainer">
+                        <h3 class="videoTitle">Test video title</h3>
+                        <div class="metadata">
+                            <span class="views">100k views</span><span class="uploadTime">1 hour ago</span>
+                        </div>
+                    </div>
                 </div>
-
-                <!-- Card actions -->
-                <div class="pmd-card-footer text-right">
-                    <button type="button" class="btn pmd-ripple-effect btn-default">Cancel</button>
-                    <button class="btn pmd-ripple-effect btn-primary" type="button">View details</button>
-                </div>
+                <!--Default card ends -->
             </div>
-            <!--Default card ends -->
-        </div>
-        <div class="col-sm-4 col-xs-12">
-            <!-- Default card starts -->
-            <div class="pmd-card pmd-card-default pmd-z-depth">
-
-                <!-- Card body -->
-                <div class="pmd-card-title">
-                    <h2 class="pmd-card-title-text">Responsive Component</h2>
-                    <span class="pmd-card-subtitle-text">Custom stylings</span>
-                </div>
-
-                <div class="pmd-card-body">
-                    Proin venenatis tellus et magna tristique, id commodo lectus accumsan. Cras vulputate feugiat viverra. Vivamus ultrices vulputate accumsan. Donec mattis est ut fringilla euismod. Donec ante turpis, gravida sed est vitae, vulputate porta ipsum.
-                </div>
-
-                <!-- Card actions -->
-                <div class="pmd-card-footer text-right">
-                    <button type="button" class="btn pmd-ripple-effect btn-default">Cancel</button>
-                    <button class="btn pmd-ripple-effect btn-primary" type="button">View details</button>
-                </div>
-            </div>
-            <!--Default card ends -->
-        </div>
-        <div class="col-sm-4 col-xs-12">
-            <!-- Default card starts -->
-            <div class="pmd-card pmd-card-default pmd-z-depth">
-
-                <!-- Card body -->
-                <div class="pmd-card-title">
-                    <h2 class="pmd-card-title-text">Speed Up Development</h2>
-                    <span class="pmd-card-subtitle-text">Ready to use components</span>
-                </div>
-
-                <div class="pmd-card-body">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et erat ut nulla imperdiet convallis. Aenean ornare imperdiet quam vitae posuere. In molestie convallis ante a ornare. Donec lacus orci, rutrum eu volutpat ut, euismod in turpis.
-                </div>
-
-                <!-- Card actions -->
-                <div class="pmd-card-footer text-right">
-                    <button type="button" class="btn pmd-ripple-effect btn-default">Cancel</button>
-                    <button class="btn pmd-ripple-effect btn-primary" type="button">View details</button>
-                </div>
-            </div>
-            <!--Default card ends -->
         </div>
     </div>
-
-    <hr>
-
-    <footer>
-        <p class="text-center">© <span class="auto-update-year">2018</span> <a href="http://propeller.in/" data-ytta-id="-">Propeller.in</a></p>
-    </footer>
-</div> <!-- /container -->
+</div>
 
 
 <!-- Bootstrap core JavaScript
@@ -194,6 +111,10 @@
 <!-- Propeller Top Bar -->
 <script type="text/javascript" src="js/vendor/propeller-topbar.js"></script>
 
-<script>$(".auto-update-year").html(new Date().getFullYear());</script>
+<script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="js/vendor/bootstrap-material-datetimepicker.js"></script>
 
-</body></html>
+<div style="width: 0px; overflow: hidden;"><input title="test" type="text" id="dtp"></div>
+
+</body>
+</html>

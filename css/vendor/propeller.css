@@ -851,35 +851,35 @@ h2.pmd-card-title-text {
 
 .btn-primary {
   color: #fff;
-  background-color: #4285f4;
+  background-color: #ff0000;
 }
 .btn-primary:hover {
   color: #fff;
-  background-color: #1e6ef2;
+  background-color: #e60000;
 }
 .btn-primary:focus, .btn-primary.focus, .btn-primary:active, .btn-primary.active, .btn-primary.active.focus, .btn-primary.active:focus, .btn-primary:active.focus, .btn-primary:active:focus {
   color: #fff;
-  background-color: #1e6ef2;
+  background-color: #e60000;
 }
 .btn-primary .ink {
-  background-color: #1266f1;
+  background-color: #ff0000;
 }
 .btn-primary.pmd-btn-flat {
-  color: #4285f4;
+  color: #ff0000;
   background-color: transparent;
 }
 .btn-primary.pmd-btn-flat:hover {
   background-color: #e5e5e5;
 }
 .btn-primary.pmd-btn-flat:active, .btn-primary.pmd-btn-flat.active, .btn-primary.pmd-btn-flat:focus {
-  color: #4285f4;
+  color: #ff0000;
   background-color: #cccccc;
 }
 .btn-primary.pmd-btn-flat .ink {
   background-color: #808080;
 }
 .btn-primary.pmd-btn-outline {
-  border-color: #4285f4;
+  border-color: #ff0000;
   background-color: transparent;
   color: #4285f4;
 }
