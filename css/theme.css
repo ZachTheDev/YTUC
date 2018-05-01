@@ -88,3 +88,10 @@ hr { border-top:1px solid #e4e4e4;}
     content: '•';
     margin: 0 4px;
 }
+
+.thumbnailImage {
+    max-width: 327.990px;
+    min-width: 327.990px;
+    max-height: 184.490px;
+    min-height: 184.490px;
+}

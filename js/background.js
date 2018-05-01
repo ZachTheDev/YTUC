@@ -1,5 +1,5 @@
 let channelList = [];
-let iconList = [];
+let channelIcon = [];
 
 let inputDate = '';
 
@@ -9,7 +9,6 @@ let videoIdByChannel = [];
 let finalFormat = [];
 
 let channelTitle = '';
-let channelIcon = '';
 let uploadDate = '';
 let thumbnailUrl = '';
 let videoTitle = '';
@@ -34,6 +33,9 @@ function setupLogin() {
         getVideoId();
         setTimeout(function(){
             getMetadataFromId();
+            setTimeout(function(){
+                createCards();
+            }, 1000);
         },1000);
     })
 }
@@ -143,46 +145,8 @@ function getMetadataFromId() {
             if (typeof(videoId) !== 'undefined') {
                 let request = gapi.client.youtube.videos.list({
                     'part': 'snippet,contentDetails,statistics',
-                    'fields': 'items(contentDetails/duration,snippet(channelTitle,title,publishedAt),statistics/viewCount)',
+                    'fields': 'items(contentDetails/duration,snippet(channelId,channelTitle,title,publishedAt),statistics/viewCount)',
                     'id': videoId
-                });
-
-                let iconRequest = gapi.client.youtube.channels.list({
-                    'part': 'snippet',
-                    'fields': 'items(snippet(thumbnails/default/url,title)),nextPageToken,pageInfo,prevPageToken,tokenPagination',
-                    'id': channelId,
-                    'maxResults': '50'
-                });
-
-                let totalResultsIcons;
-                let pageToken;
-
-                // Execute the API request.
-                iconRequest.execute(function (response) {
-                    // console.log(JSON.stringify(response, null, "\t"));
-                    totalResultsIcons = response.pageInfo.totalResults;
-                    pageToken = response.nextPageToken;
-
-                    if (totalResultsIcons >= 50) {
-                        let request = gapi.client.youtube.channels.list({
-                            'part': 'snippet',
-                            'fields': 'items(snippet(thumbnails/default/url,title)),nextPageToken,pageInfo,prevPageToken,tokenPagination',
-                            'id': channelId,
-                            'maxResults': '50',
-                            'pageToken': pageToken
-                        });
-                        request.execute(function (response) {
-                            response.items.forEach(function (item) {
-                                // console.log(JSON.stringify(item, null, "\t"));
-                                let channelTitle = item.snippet.title;
-                                iconList.push([channelTitle, [item.snippet.thumbnails.default.url]]);
-                            });
-                        });
-                    }
-                    response.items.forEach(function (item) {
-                        // console.log(JSON.stringify(item, null, "\t"));
-                        channelIcon = item.snippet.thumbnails.default.url;
-                    });
                 });
 
                 // Execute the API request.
@@ -198,15 +162,36 @@ function getMetadataFromId() {
                         viewCount = item.statistics.viewCount;
                     });
 
-                     finalData.push([channelTitle, [channelId, channelIcon, channelTitle, uploadDate, thumbnailUrl, videoTitle, duration, viewCount]]);
+                    // let iconRequest = gapi.client.youtube.channels.list({
+                    //     'part': 'snippet',
+                    //     'fields': 'items(snippet(thumbnails/default/url,title)),nextPageToken,pageInfo,prevPageToken,tokenPagination',
+                    //     'id': channelId
+                    // });
+                    //
+                    // // Execute the API request.
+                    // iconRequest.execute(function (response) {
+                    //     // console.log(JSON.stringify(response, null, "\t"));
+                    //     response.items.forEach(function (item) {
+                    //         // console.log(JSON.stringify(item, null, "\t"));
+                    //         channelIconUrl = item.snippet.thumbnails.default.url;
+                    //         let channelTitle = item.snippet.title;
+                    //         channelIcon.push([channelTitle, channelIconUrl]);
+                    //     });
+                    // });
+
+                    // channelIcon.sort(function (x, y) {
+                    //     if ((x.toString().toLowerCase()) < (y.toString().toLowerCase())) return -1;
+                    //     else if ((x.toString().toLowerCase()) > (y.toString().toLowerCase())) return 1;
+                    //     return 0;
+                    // });
+
+
+                    finalData.push([channelTitle, [channelId, channelTitle, uploadDate, thumbnailUrl, videoTitle, duration, viewCount]]);
 
                      finalData.sort(function (a, b) {
                          if ((a.toString().toLowerCase()) < (b.toString().toLowerCase())) return -1;
                          else if ((a.toString().toLowerCase()) > (b.toString().toLowerCase())) return 1;
                          return 0;
-                        // if (a < b) return -1;
-                        // else if (a > b) return 1;
-                        // return 0;
                     });
                 });
             }
@@ -216,35 +201,52 @@ function getMetadataFromId() {
     globalData = finalData;
 }
 
+function createCards() {
+    $('#cardContainer').empty();
+    for (let i = 0; i < globalData.length; i++) {
+
+        // let channelIcon = globalData[i][1][1];
+        let channelTitle = globalData[i][0];
+        let thumbnail = globalData[i][1][3];
+        let title = globalData[i][1][4];
+        let viewCount = globalData[i][1][6];
+        let publishedDate = globalData[i][1][2];
+        let videoDuration = moment.duration((globalData[i][1][5]), 'seconds').format("mm:ss");
 
 
+        // console.log(videoDuration);
 
-// <div class="col-sm-4 col-xs-12">
-//     <!-- Default card starts -->
-// <div class="pmd-card pmd-card-default pmd-z-depth">
-//     <!-- Card body -->
-// <div class="pmd-card-title">
-//     <div class="titleContainer clearfix float-my-children">
-//     <img src="https://yt3.ggpht.com/-3GSWfHL9moQ/AAAAAAAAAAI/AAAAAAAAAAA/0tcO6ddi8eY/s88-c-k-no-mo-rj-c0xffffff/photo.jpg"
-// style="max-width:10%;display: inline;"/>
-//     <p class="pmd-card-title-text" style="font-size: 1.3rem;font-weight: 500; margin-left: 0.5rem;">Channel Title</p>
-// </div>
-// </div>
-//
-// <hr style="max-width: 90%;">
-//
-//     <div class="pmd-card-body">
-//     <div class="thumbnailContainer">
-//     <img src="img/yt_catcher.png" style="max-width:100%;"/>
-//     <span class="thumbnailTag">Test</span>
-//     </div>
-//     <div class="detailsContainer">
-//     <h3 class="videoTitle">Test video title</h3>
-// <div class="metadata">
-//     <span class="views">100k views</span><span class="uploadTime">1 hour ago</span>
-// </div>
-// </div>
-// </div>
-// <!--Default card ends -->
-// </div>
-// </div>
+
+        $('#cardContainer').append(
+            '<div class="col-sm-4 col-xs-12">' +
+                '<!-- Default card starts -->' +
+                '<div class="pmd-card pmd-card-default pmd-z-depth">' +
+                    '<!-- Card body -->' +
+                    '<div class="pmd-card-title">' +
+                        '<div class="titleContainer clearfix float-my-children">' +
+                            '<img src="' + channelIcon + '" style="max-width:10%;display: inline;"/>' +
+                            '<p class="pmd-card-title-text" style="font-size: 1.3rem;font-weight: 500; margin-left: 0.5rem;">' + channelTitle + '</p>' +
+                        '</div>' +
+                    '</div>' +
+
+                    '<hr style="max-width: 90%;">' +
+
+                    '<div class="pmd-card-body">' +
+                        '<div class="thumbnailContainer">' +
+                            '<img src="' + thumbnail + '" class="thumbnailImage" style="max-width:100%;"/>' +
+                            '<span class="thumbnailTag">' + videoDuration + '</span>' +
+                        '</div>' +
+                        '<div class="detailsContainer">' +
+                            '<h3 class="videoTitle">' + title + '</h3>' +
+                            '<div class="metadata">' +
+                                '<span class="views">' + viewCount + ' views</span><span class="uploadTime">' + publishedDate + '</span>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<!--Default card ends -->' +
+                '</div>' +
+            '</div>'
+        );
+    }
+}
+
