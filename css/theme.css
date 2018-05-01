@@ -1,3 +1,7 @@
+/*
+Code below was provided by PropellerJs.in
+*/
+
 /* GLOBAL STYLES
 -------------------------------------------------- */
 /* Padding below the footer and lighter body text */
@@ -23,6 +27,8 @@ hr { border-top:1px solid #e4e4e4;}
 	.pmd-navbar.navbar-inverse .pmd-navbar-sidebar { background-color: #ff0000;}
 	.navbar-inverse .navbar-nav .open .dropdown-menu>li>a { color: #ffffff;}
 }
+
+/*End of PropellerJS code*/
 
 * {
     font-family: 'Roboto', sans-serif;

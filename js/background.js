@@ -185,7 +185,6 @@ function getMetadataFromId() {
                     //     return 0;
                     // });
 
-
                     finalData.push([channelTitle, [channelId, channelTitle, uploadDate, thumbnailUrl, videoTitle, duration, viewCount]]);
 
                      finalData.sort(function (a, b) {
@@ -213,24 +212,16 @@ function createCards() {
         let publishedDate = globalData[i][1][2];
         let videoDuration = moment.duration((globalData[i][1][5]), 'seconds').format("mm:ss");
 
-
-        // console.log(videoDuration);
-
-
         $('#cardContainer').append(
             '<div class="col-sm-4 col-xs-12">' +
-                '<!-- Default card starts -->' +
                 '<div class="pmd-card pmd-card-default pmd-z-depth">' +
-                    '<!-- Card body -->' +
                     '<div class="pmd-card-title">' +
                         '<div class="titleContainer clearfix float-my-children">' +
                             '<img src="' + channelIcon + '" style="max-width:10%;display: inline;"/>' +
                             '<p class="pmd-card-title-text" style="font-size: 1.3rem;font-weight: 500; margin-left: 0.5rem;">' + channelTitle + '</p>' +
                         '</div>' +
                     '</div>' +
-
                     '<hr style="max-width: 90%;">' +
-
                     '<div class="pmd-card-body">' +
                         '<div class="thumbnailContainer">' +
                             '<img src="' + thumbnail + '" class="thumbnailImage" style="max-width:100%;"/>' +
@@ -243,7 +234,6 @@ function createCards() {
                             '</div>' +
                         '</div>' +
                     '</div>' +
-                    '<!--Default card ends -->' +
                 '</div>' +
             '</div>'
         );
